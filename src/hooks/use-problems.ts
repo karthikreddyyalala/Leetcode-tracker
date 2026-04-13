@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { loadProblems, saveProblems } from '../lib/storage'
 import { addDays, today } from '../lib/dates'
-import { syncProblems } from '../lib/api'
+import { syncProblems, fetchProblems } from '../lib/api'
 import type { Problem, Difficulty } from '../types/problem'
 
 function generateId(): string {
@@ -10,6 +10,17 @@ function generateId(): string {
 
 export function useProblems() {
   const [problems, setProblems] = useState<Problem[]>(() => loadProblems())
+
+  // On mount: fetch from Redis (source of truth across browsers/profiles).
+  // Falls back to localStorage silently if the request fails.
+  useEffect(() => {
+    fetchProblems().then((serverProblems) => {
+      if (serverProblems !== null) {
+        setProblems(serverProblems)
+        saveProblems(serverProblems)
+      }
+    })
+  }, [])
 
   const persist = useCallback((updated: Problem[]) => {
     setProblems(updated)
