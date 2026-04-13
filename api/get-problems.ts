@@ -4,7 +4,6 @@ import { Redis } from '@upstash/redis'
 const redis = Redis.fromEnv()
 
 export default async function handler(_req: VercelRequest, res: VercelResponse) {
-  const raw = await redis.get<string>('lc-tracker-problems')
-  const problems = raw ? (JSON.parse(raw) as unknown[]) : []
+  const problems = (await redis.get<unknown[]>('lc-tracker-problems')) ?? []
   return res.status(200).json({ problems })
 }

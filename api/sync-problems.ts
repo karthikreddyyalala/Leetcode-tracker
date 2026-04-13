@@ -14,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Invalid payload: expected { problems: Problem[] }' })
   }
 
-  await redis.set('lc-tracker-problems', JSON.stringify(body.problems))
+  await redis.set('lc-tracker-problems', body.problems)
 
   return res.status(200).json({ ok: true, synced: body.problems.length })
 }

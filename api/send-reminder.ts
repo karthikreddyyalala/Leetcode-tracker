@@ -151,8 +151,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
-  const raw = await redis.get<string>('lc-tracker-problems')
-  const problems: Problem[] = raw ? (JSON.parse(raw) as Problem[]) : []
+  const problems: Problem[] = (await redis.get<Problem[]>('lc-tracker-problems')) ?? []
   const due = problems.filter((p) => p.nextReview === todayUTC())
 
   if (due.length === 0) {
