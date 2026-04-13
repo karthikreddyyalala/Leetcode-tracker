@@ -11,13 +11,18 @@ function generateId(): string {
 export function useProblems() {
   const [problems, setProblems] = useState<Problem[]>(() => loadProblems())
 
-  // On mount: fetch from Redis (source of truth across browsers/profiles).
-  // Falls back to localStorage silently if the request fails.
+  // On mount: sync with Redis.
+  // If Redis has data → use it as source of truth.
+  // If Redis is empty but localStorage has data → push local data up to Redis.
+  // This handles the case where Redis was never seeded (first load after setup).
   useEffect(() => {
+    const localProblems = loadProblems()
     fetchProblems().then((serverProblems) => {
-      if (serverProblems !== null) {
+      if (serverProblems !== null && serverProblems.length > 0) {
         setProblems(serverProblems)
         saveProblems(serverProblems)
+      } else if (serverProblems !== null && localProblems.length > 0) {
+        syncProblems(localProblems)
       }
     })
   }, [])
