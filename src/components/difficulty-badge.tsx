@@ -1,19 +1,25 @@
 import type { Difficulty } from '../types/problem'
 
-const styles: Record<Difficulty, string> = {
-  Easy: 'text-emerald-400 bg-emerald-400/8 border-emerald-400/20',
-  Medium: 'text-amber-400 bg-amber-400/8 border-amber-400/20',
-  Hard: 'text-rose-400 bg-rose-400/8 border-rose-400/20',
+const dot: Record<Difficulty, string> = {
+  Easy: 'bg-emerald-400',
+  Medium: 'bg-amber-400',
+  Hard: 'bg-rose-400',
+}
+
+const text: Record<Difficulty, string> = {
+  Easy: 'text-emerald-400',
+  Medium: 'text-amber-400',
+  Hard: 'text-rose-400',
 }
 
 type Props = { difficulty: Difficulty; size?: 'sm' | 'md' }
 
 export function DifficultyBadge({ difficulty, size = 'sm' }: Props) {
-  const padding = size === 'md' ? 'px-2.5 py-1 text-xs' : 'px-2 py-0.5 text-[11px]'
+  const textSize = size === 'md' ? 'text-xs' : 'text-[11px]'
+  const dotSize = size === 'md' ? 'h-[7px] w-[7px]' : 'h-[6px] w-[6px]'
   return (
-    <span
-      className={`inline-flex items-center rounded border font-mono font-medium tracking-wide ${padding} ${styles[difficulty]}`}
-    >
+    <span className={`inline-flex items-center gap-1.5 font-mono font-semibold tracking-wide ${textSize} ${text[difficulty]}`}>
+      <span className={`shrink-0 rounded-full ${dotSize} ${dot[difficulty]}`} />
       {difficulty}
     </span>
   )
