@@ -15,6 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   await redis.set('lc-tracker-problems', body.problems)
+  console.log('[sync-problems] saved', (body.problems as unknown[]).length, 'problems to Redis')
 
   return res.status(200).json({ ok: true, synced: body.problems.length })
 }
