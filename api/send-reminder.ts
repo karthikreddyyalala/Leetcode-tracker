@@ -162,7 +162,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const resend = new Resend(process.env.RESEND_API_KEY)
 
   const { error } = await resend.emails.send({
-    from: 'LC Tracker <reminders@your-verified-domain.com>',
+    from: 'LC Tracker <onboarding@resend.dev>',
     to: process.env.REMINDER_EMAIL!,
     subject: `💪 ${due.length} problem${due.length !== 1 ? 's' : ''} waiting for you today, Karthik`,
     html: buildEmailHtml(due),
