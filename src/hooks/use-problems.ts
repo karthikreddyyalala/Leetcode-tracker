@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { loadProblems, saveProblems } from '../lib/storage'
 import { addDays, today } from '../lib/dates'
+import { syncProblems } from '../lib/api'
 import type { Problem, Difficulty } from '../types/problem'
 
 function generateId(): string {
@@ -13,6 +14,7 @@ export function useProblems() {
   const persist = useCallback((updated: Problem[]) => {
     setProblems(updated)
     saveProblems(updated)
+    syncProblems(updated)
   }, [])
 
   const addProblem = useCallback(
