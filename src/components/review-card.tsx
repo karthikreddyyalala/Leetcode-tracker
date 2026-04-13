@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowSquareOut, Check, Trash } from '@phosphor-icons/react'
 import { DifficultyBadge } from './difficulty-badge'
 import { formatDate, daysUntil } from '../lib/dates'
-import type { Problem } from '../types/problem'
+import type { Problem, Difficulty } from '../types/problem'
 
 type Props = {
   problem: Problem
@@ -12,8 +12,15 @@ type Props = {
   showNext?: boolean
 }
 
+const accentBar: Record<Difficulty, string> = {
+  Easy: 'bg-emerald-500/50',
+  Medium: 'bg-amber-500/50',
+  Hard: 'bg-rose-500/50',
+}
+
 export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Props) {
   const overdue = daysUntil(problem.nextReview)
+  const isOverdue = showNext && overdue <= 0
 
   return (
     <motion.div
@@ -22,16 +29,28 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -4, scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-      className="group flex items-start justify-between gap-4 border-b border-zinc-800/60 py-4 last:border-0"
+      className="group relative flex items-start justify-between gap-4 border-b border-zinc-800/60 py-4 pl-4 last:border-0"
     >
+      <div className={`absolute left-0 top-4 h-[calc(100%-2rem)] w-[2px] rounded-full transition-base ${accentBar[problem.difficulty]}`} />
+
       <div className="flex min-w-0 flex-col gap-1.5">
         <div className="flex items-center gap-2.5 flex-wrap">
           <DifficultyBadge difficulty={problem.difficulty} />
+          {problem.reviewDates.length > 0 && (
+            <span className="rounded-full border border-zinc-700/60 bg-zinc-800/50 px-2 py-0.5 font-mono text-[10px] text-zinc-500">
+              {problem.reviewDates.length}x
+            </span>
+          )}
+          {isOverdue && (
+            <span className="rounded-full border border-amber-500/25 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-400">
+              {overdue === 0 ? 'due today' : `${Math.abs(overdue)}d overdue`}
+            </span>
+          )}
           <a
             href={problem.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-sm font-medium text-zinc-100 transition-base hover:text-sky-400 truncate max-w-[320px]"
+            className="flex items-center gap-1 text-sm font-medium text-zinc-100 transition-base hover:text-sky-400 truncate max-w-[300px]"
           >
             {problem.title}
             <ArrowSquareOut size={12} className="shrink-0 opacity-0 group-hover:opacity-60 transition-base" />
@@ -39,22 +58,10 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
         </div>
         <div className="flex items-center gap-3 text-[11px] text-zinc-500">
           <span>Solved {formatDate(problem.dateSolved)}</span>
-          {showNext && (
+          {showNext && !isOverdue && (
             <>
               <span className="h-3 w-px bg-zinc-700" />
-              <span>
-                Next review{' '}
-                {overdue <= 0
-                  ? <span className="text-amber-400 font-medium">{Math.abs(overdue) === 0 ? 'today' : `${Math.abs(overdue)}d overdue`}</span>
-                  : formatDate(problem.nextReview)
-                }
-              </span>
-            </>
-          )}
-          {problem.reviewDates.length > 0 && (
-            <>
-              <span className="h-3 w-px bg-zinc-700" />
-              <span className="font-mono">{problem.reviewDates.length}x reviewed</span>
+              <span>Next review {formatDate(problem.nextReview)}</span>
             </>
           )}
         </div>
