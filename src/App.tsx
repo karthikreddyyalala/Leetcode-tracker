@@ -21,7 +21,7 @@ export default function App() {
   const dueCount = problems.filter((p) => isDueToday(p.nextReview)).length
 
   return (
-    <div className="min-h-[100dvh] bg-zinc-950 font-sans">
+    <div className="min-h-[100dvh] bg-zinc-950 font-sans selection:bg-sky-500/20 selection:text-sky-300">
       <NavBar current={page} onChange={setPage} dueCount={dueCount} totalCount={problems.length} />
 
       <AnimatePresence mode="wait">

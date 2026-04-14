@@ -17,7 +17,7 @@ const tabs: { id: Page; label: string; Icon: React.ElementType }[] = [
 
 export function NavBar({ current, onChange, dueCount, totalCount }: Props) {
   return (
-    <header className="sticky top-0 z-30 border-b border-zinc-800/60 bg-zinc-950/90 backdrop-blur-md">
+    <header className="sticky top-0 z-30 border-b border-zinc-800/60 bg-zinc-950/95 backdrop-blur-xl shadow-[0_1px_0_0_rgba(39,39,42,0.8)]">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-3">
         <div className="flex items-center gap-2.5">
           <div className="flex h-6 w-6 items-center justify-center rounded bg-sky-500 text-zinc-950">
