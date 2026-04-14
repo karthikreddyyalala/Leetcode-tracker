@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { AddProblemForm } from '../components/add-problem-form'
 import { ReviewCard } from '../components/review-card'
 import { EmptyState } from '../components/empty-state'
-import { isDueToday, today } from '../lib/dates'
+import { isDueToday, today, formatDate } from '../lib/dates'
 import type { Problem, Difficulty } from '../types/problem'
 
 type Props = {
@@ -27,7 +27,7 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
   const streakDays = useMemo(() => {
     const dates = new Set(problems.map((p) => p.dateSolved))
     let count = 0
-    let cursor = new Date()
+    const cursor = new Date()
     while (true) {
       const d = cursor.toISOString().split('T')[0]
       if (dates.has(d)) {
@@ -40,10 +40,38 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
     return count
   }, [problems])
 
+  const todayLabel = formatDate(today())
+
+  const stats = [
+    {
+      label: 'Due today',
+      value: dueToday.length,
+      accent: dueToday.length > 0 ? 'text-amber-400' : 'text-zinc-100',
+    },
+    {
+      label: 'Logged today',
+      value: todayLogged,
+      accent: 'text-zinc-100',
+    },
+    {
+      label: 'Day streak',
+      value: streakDays,
+      accent: streakDays > 0 ? 'text-sky-400' : 'text-zinc-100',
+    },
+    {
+      label: 'Total logged',
+      value: problems.length,
+      accent: 'text-zinc-100',
+    },
+  ]
+
   return (
     <div className="mx-auto max-w-4xl px-5 py-8">
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-[2fr_1fr]">
         <div>
+          <p className="mb-1 font-mono text-[11px] uppercase tracking-widest text-zinc-600">
+            {todayLabel}
+          </p>
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
             Review Queue
           </h1>
@@ -56,30 +84,11 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
         </div>
       </div>
 
-      <div className="mb-8 grid grid-cols-3 gap-3">
-        {[
-          {
-            label: 'Due today',
-            value: dueToday.length,
-            accent: dueToday.length > 0 ? 'text-amber-400' : 'text-zinc-100',
-          },
-          {
-            label: 'Logged today',
-            value: todayLogged,
-            accent: 'text-zinc-100',
-          },
-          {
-            label: 'Day streak',
-            value: streakDays,
-            accent: streakDays > 0 ? 'text-sky-400' : 'text-zinc-100',
-          },
-        ].map(({ label, value, accent }) => (
-          <div
-            key={label}
-            className="rounded-xl border border-zinc-800/70 bg-zinc-900/40 px-4 py-3"
-          >
-            <p className="text-[11px] font-medium uppercase tracking-widest text-zinc-600">{label}</p>
-            <p className={`mt-1 font-mono text-2xl font-semibold ${accent}`}>{value}</p>
+      <div className="mb-8 flex divide-x divide-zinc-800/70 rounded-xl border border-zinc-800/70 bg-zinc-900/30 overflow-hidden">
+        {stats.map(({ label, value, accent }) => (
+          <div key={label} className="flex-1 px-5 py-4">
+            <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">{label}</p>
+            <p className={`mt-1.5 font-mono text-2xl font-semibold ${accent}`}>{value}</p>
           </div>
         ))}
       </div>
