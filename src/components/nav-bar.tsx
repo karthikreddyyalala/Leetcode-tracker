@@ -7,6 +7,7 @@ type Props = {
   current: Page
   onChange: (page: Page) => void
   dueCount: number
+  totalCount: number
 }
 
 const tabs: { id: Page; label: string; Icon: React.ElementType }[] = [
@@ -14,11 +15,11 @@ const tabs: { id: Page; label: string; Icon: React.ElementType }[] = [
   { id: 'history', label: 'History', Icon: ClockCounterClockwise },
 ]
 
-export function NavBar({ current, onChange, dueCount }: Props) {
+export function NavBar({ current, onChange, dueCount, totalCount }: Props) {
   return (
     <header className="sticky top-0 z-30 border-b border-zinc-800/60 bg-zinc-950/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-3">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <div className="flex h-6 w-6 items-center justify-center rounded bg-sky-500 text-zinc-950">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <rect x="1" y="1" width="4" height="4" rx="1" fill="currentColor" />
@@ -28,6 +29,11 @@ export function NavBar({ current, onChange, dueCount }: Props) {
             </svg>
           </div>
           <span className="text-sm font-semibold tracking-tight text-zinc-100">LC Tracker</span>
+          {totalCount > 0 && (
+            <span className="hidden sm:inline font-mono text-[11px] text-zinc-600">
+              · {totalCount} problem{totalCount !== 1 ? 's' : ''}
+            </span>
+          )}
         </div>
 
         <nav className="flex items-center gap-0.5 rounded-lg border border-zinc-800 bg-zinc-900 p-0.5">
@@ -53,9 +59,14 @@ export function NavBar({ current, onChange, dueCount }: Props) {
                 {label}
               </span>
               {id === 'dashboard' && dueCount > 0 && (
-                <span className="relative z-10 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-sky-500 px-1 font-mono text-[10px] font-bold text-zinc-950">
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+                  className="relative z-10 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-sky-500 px-1 font-mono text-[10px] font-bold text-zinc-950"
+                >
                   {dueCount}
-                </span>
+                </motion.span>
               )}
             </button>
           ))}

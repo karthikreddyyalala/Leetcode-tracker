@@ -22,7 +22,7 @@ export default function App() {
 
   return (
     <div className="min-h-[100dvh] bg-zinc-950 font-sans">
-      <NavBar current={page} onChange={setPage} dueCount={dueCount} />
+      <NavBar current={page} onChange={setPage} dueCount={dueCount} totalCount={problems.length} />
 
       <AnimatePresence mode="wait">
         <motion.main
