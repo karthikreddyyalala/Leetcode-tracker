@@ -68,7 +68,7 @@ export function AddProblemForm({ onAdd }: Props) {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.97 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-        className="inline-flex items-center gap-2 rounded-lg bg-sky-500 px-4 py-2 text-sm font-medium text-zinc-950 transition-base hover:bg-sky-400 active:scale-[0.97]"
+        className="inline-flex items-center gap-2 rounded-lg bg-sky-500 px-4 py-2 text-sm font-semibold text-zinc-950 shadow-[0_0_0_1px_rgba(14,165,233,0.3),0_4px_12px_-2px_rgba(14,165,233,0.25)] transition-base hover:bg-sky-400 active:scale-[0.97]"
       >
         <Plus weight="bold" size={15} />
         Log Problem
