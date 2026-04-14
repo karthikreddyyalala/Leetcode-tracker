@@ -93,10 +93,13 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
         ))}
       </div>
 
-      <div className="rounded-xl border border-zinc-800/70 bg-zinc-900/30">
-        <div className="border-b border-zinc-800/60 px-5 py-3.5">
+      <div className="rounded-xl border border-zinc-800/70 bg-zinc-900/30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
+        <div className="flex items-center justify-between border-b border-zinc-800/60 px-5 py-3.5">
           <span className="text-xs font-medium uppercase tracking-widest text-zinc-600">
-            Today&#39;s queue &mdash; {dueToday.length} problem{dueToday.length !== 1 ? 's' : ''}
+            Today&#39;s queue
+          </span>
+          <span className={`font-mono text-xs font-semibold ${dueToday.length > 0 ? 'text-amber-400' : 'text-zinc-600'}`}>
+            {dueToday.length} problem{dueToday.length !== 1 ? 's' : ''}
           </span>
         </div>
 
