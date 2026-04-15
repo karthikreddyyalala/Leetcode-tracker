@@ -58,7 +58,8 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">History</h1>
           <p className="mt-1 text-sm text-zinc-500">
-            All {problems.length} problem{problems.length !== 1 ? 's' : ''} you&#39;ve logged.
+            <span className="font-mono font-semibold text-zinc-300">{problems.length}</span>{' '}
+            problem{problems.length !== 1 ? 's' : ''} logged across your career.
           </p>
         </div>
 
