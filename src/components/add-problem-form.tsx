@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, X } from '@phosphor-icons/react'
 import type { Difficulty } from '../types/problem'
-import { today } from '../lib/dates'
+import { today, addDays, formatDate } from '../lib/dates'
 
 type FormData = {
   title: string
@@ -165,9 +165,16 @@ export function AddProblemForm({ onAdd }: Props) {
                       onChange={(e) => setForm({ ...form, dateSolved: e.target.value })}
                       className="rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-2 text-sm text-zinc-100 outline-none transition-base focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/30 [color-scheme:dark]"
                     />
-                    {errors.dateSolved && (
+                    {errors.dateSolved ? (
                       <span className="text-[11px] text-rose-400">{errors.dateSolved}</span>
-                    )}
+                    ) : form.dateSolved ? (
+                      <span className="text-[11px] text-zinc-500">
+                        Due for review on{' '}
+                        <span className="font-medium text-sky-400">
+                          {formatDate(addDays(form.dateSolved, 7))}
+                        </span>
+                      </span>
+                    ) : null}
                   </div>
 
                   <div className="flex items-center justify-end gap-3 border-t border-zinc-800 pt-4">
