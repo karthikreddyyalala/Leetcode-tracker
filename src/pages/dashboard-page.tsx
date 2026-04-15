@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { AddProblemForm } from '../components/add-problem-form'
 import { ReviewCard } from '../components/review-card'
 import { EmptyState } from '../components/empty-state'
-import { isDueToday, today, formatDate } from '../lib/dates'
+import { isDueToday, today, formatDate, dayOfWeek, getGreeting } from '../lib/dates'
 import type { Problem, Difficulty } from '../types/problem'
 
 type Props = {
@@ -41,6 +41,7 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
   }, [problems])
 
   const todayLabel = formatDate(today())
+  const greeting = getGreeting()
 
   const stats = [
     {
@@ -73,10 +74,12 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
             {todayLabel}
           </p>
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
-            Review Queue
+            {greeting}, Karthik
           </h1>
           <p className="mt-1 text-sm text-zinc-500">
-            Problems due for review today based on your spaced repetition schedule.
+            {dueToday.length > 0
+              ? `You have ${dueToday.length} problem${dueToday.length !== 1 ? 's' : ''} waiting for review.`
+              : 'No problems due for review today.'}
           </p>
         </div>
         <div className="flex items-start justify-start md:justify-end">
@@ -126,12 +129,13 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, type: 'spring', stiffness: 200, damping: 24 }}
-          className="mt-6 rounded-xl border border-zinc-800/70 bg-zinc-900/30"
+          className="mt-6 rounded-xl border border-zinc-800/70 bg-zinc-900/30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]"
         >
-          <div className="border-b border-zinc-800/60 px-5 py-3.5">
+          <div className="flex items-center justify-between border-b border-zinc-800/60 px-5 py-3.5">
             <span className="text-xs font-medium uppercase tracking-widest text-zinc-600">
-              Upcoming &mdash; next 7 days
+              Upcoming
             </span>
+            <span className="font-mono text-xs text-zinc-600">next 7 days</span>
           </div>
           <div className="px-5">
             {problems
@@ -139,13 +143,21 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
               .sort((a, b) => a.nextReview.localeCompare(b.nextReview))
               .slice(0, 5)
               .map((p) => (
-                <ReviewCard
-                  key={p.id}
-                  problem={p}
-                  onReview={onReview}
-                  onDelete={onDelete}
-                  showNext
-                />
+                <div key={p.id} className="flex items-center gap-3">
+                  <div className="shrink-0 w-8 text-center">
+                    <span className="font-mono text-[10px] font-medium uppercase tracking-wide text-zinc-600">
+                      {dayOfWeek(p.nextReview)}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <ReviewCard
+                      problem={p}
+                      onReview={onReview}
+                      onDelete={onDelete}
+                      showNext
+                    />
+                  </div>
+                </div>
               ))}
             {problems.filter((p) => !isDueToday(p.nextReview)).length === 0 && (
               <p className="py-6 text-center text-xs text-zinc-600">No upcoming reviews scheduled.</p>
