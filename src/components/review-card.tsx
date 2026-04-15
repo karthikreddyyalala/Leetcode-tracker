@@ -29,7 +29,7 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -4, scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-      className="group relative flex items-start justify-between gap-4 border-b border-zinc-800/60 py-4 pl-4 last:border-0 rounded-lg transition-base hover:bg-zinc-800/20 -mx-2 px-2"
+      className="group relative flex items-start justify-between gap-4 border-b border-zinc-800/60 py-4 pl-4 last:border-0 rounded-lg transition-base hover:bg-zinc-800/25 -mx-2 px-2 cursor-default"
     >
       <div className={`absolute left-0 top-4 h-[calc(100%-2rem)] w-[2px] rounded-full transition-base ${accentBar[problem.difficulty]}`} />
 
@@ -67,7 +67,7 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center gap-1 opacity-0 transition-base group-hover:opacity-100">
+      <div className="flex shrink-0 items-center gap-1 opacity-0 transition-base group-hover:opacity-100 translate-x-1 group-hover:translate-x-0">
         <motion.button
           whileTap={{ scale: 0.93 }}
           transition={{ type: 'spring', stiffness: 400, damping: 20 }}
