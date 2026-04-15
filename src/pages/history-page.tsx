@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { MagnifyingGlass, FunnelSimple, X } from '@phosphor-icons/react'
+import { MagnifyingGlass, FunnelSimple, X, ArrowsDownUp } from '@phosphor-icons/react'
 import { ReviewCard } from '../components/review-card'
 import { EmptyState } from '../components/empty-state'
 import { DifficultyBadge } from '../components/difficulty-badge'
@@ -25,6 +25,7 @@ const barColor: Record<Difficulty, string> = {
 export function HistoryPage({ problems, onReview, onDelete }: Props) {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<Filter>('All')
+  const [sortDir, setSortDir] = useState<'desc' | 'asc'>('desc')
 
   const filtered = useMemo(() => {
     return problems
@@ -33,7 +34,11 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
         const matchesSearch = p.title.toLowerCase().includes(search.toLowerCase())
         return matchesDiff && matchesSearch
       })
-      .sort((a, b) => b.dateSolved.localeCompare(a.dateSolved))
+      .sort((a, b) =>
+        sortDir === 'desc'
+          ? b.dateSolved.localeCompare(a.dateSolved)
+          : a.dateSolved.localeCompare(b.dateSolved),
+      )
   }, [problems, search, filter])
 
   const counts = useMemo(
@@ -138,25 +143,37 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
       )}
 
       <div className="rounded-xl border border-zinc-800/70 bg-zinc-900/30">
-        <div className="border-b border-zinc-800/60 px-5 py-3.5">
+        <div className="flex items-center justify-between border-b border-zinc-800/60 px-5 py-3.5">
           <span className="text-xs font-medium uppercase tracking-widest text-zinc-600">
             {filtered.length} result{filtered.length !== 1 ? 's' : ''}
           </span>
+          {filtered.length > 1 && (
+            <button
+              onClick={() => setSortDir((d) => (d === 'desc' ? 'asc' : 'desc'))}
+              className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-500 transition-base hover:text-zinc-300"
+            >
+              <ArrowsDownUp size={12} />
+              {sortDir === 'desc' ? 'Newest first' : 'Oldest first'}
+            </button>
+          )}
         </div>
         <div className="px-5">
           <AnimatePresence mode="popLayout">
             {problems.length === 0 ? (
               <EmptyState variant="history-empty" />
             ) : filtered.length === 0 ? (
-              <motion.p
+              <motion.div
                 key="no-match"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="py-10 text-center text-xs text-zinc-600"
+                className="my-6 flex flex-col items-center justify-center rounded-lg border border-dashed border-zinc-800 py-10 text-center"
               >
-                No problems match your filters.
-              </motion.p>
+                <p className="text-sm font-medium text-zinc-500">No matches found</p>
+                <p className="mt-1 text-xs text-zinc-600">
+                  Try a different search term or filter.
+                </p>
+              </motion.div>
             ) : (
               filtered.map((p) => (
                 <ReviewCard
