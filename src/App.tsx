@@ -16,13 +16,13 @@ const pageVariants = {
 
 export default function App() {
   const [page, setPage] = useState<Page>('dashboard')
-  const { problems, addProblem, markReviewed, deleteProblem } = useProblems()
+  const { problems, addProblem, markReviewed, deleteProblem, isSyncing } = useProblems()
 
   const dueCount = problems.filter((p) => isDueToday(p.nextReview)).length
 
   return (
     <div className="min-h-[100dvh] bg-zinc-950 font-sans selection:bg-sky-500/20 selection:text-sky-300">
-      <NavBar current={page} onChange={setPage} dueCount={dueCount} totalCount={problems.length} />
+      <NavBar current={page} onChange={setPage} dueCount={dueCount} totalCount={problems.length} isSyncing={isSyncing} />
 
       <AnimatePresence mode="wait">
         <motion.main

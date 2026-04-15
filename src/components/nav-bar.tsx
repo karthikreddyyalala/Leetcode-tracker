@@ -8,6 +8,7 @@ type Props = {
   onChange: (page: Page) => void
   dueCount: number
   totalCount: number
+  isSyncing: boolean
 }
 
 const tabs: { id: Page; label: string; Icon: React.ElementType }[] = [
@@ -15,7 +16,7 @@ const tabs: { id: Page; label: string; Icon: React.ElementType }[] = [
   { id: 'history', label: 'History', Icon: ClockCounterClockwise },
 ]
 
-export function NavBar({ current, onChange, dueCount, totalCount }: Props) {
+export function NavBar({ current, onChange, dueCount, totalCount, isSyncing }: Props) {
   return (
     <header className="sticky top-0 z-30 border-b border-zinc-800/60 bg-zinc-950/95 backdrop-blur-xl shadow-[0_1px_0_0_rgba(39,39,42,0.8)]">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-3">
@@ -29,11 +30,20 @@ export function NavBar({ current, onChange, dueCount, totalCount }: Props) {
             </svg>
           </div>
           <span className="text-sm font-semibold tracking-tight text-zinc-100">LC Tracker</span>
-          {totalCount > 0 && (
+          {isSyncing ? (
+            <span className="hidden sm:flex items-center gap-1.5 font-mono text-[11px] text-zinc-600">
+              <motion.span
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 1.2, repeat: Infinity }}
+                className="h-1.5 w-1.5 rounded-full bg-sky-500"
+              />
+              syncing
+            </span>
+          ) : totalCount > 0 ? (
             <span className="hidden sm:inline font-mono text-[11px] text-zinc-600">
               · {totalCount} problem{totalCount !== 1 ? 's' : ''}
             </span>
-          )}
+          ) : null}
         </div>
 
         <nav className="flex items-center gap-0.5 rounded-lg border border-zinc-800 bg-zinc-900 p-0.5">

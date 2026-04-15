@@ -10,6 +10,7 @@ function generateId(): string {
 
 export function useProblems() {
   const [problems, setProblems] = useState<Problem[]>(() => loadProblems())
+  const [isSyncing, setIsSyncing] = useState(true)
 
   // On mount: sync with Redis.
   // If Redis has data → use it as source of truth.
@@ -24,7 +25,7 @@ export function useProblems() {
       } else if (serverProblems !== null && localProblems.length > 0) {
         syncProblems(localProblems)
       }
-    })
+    }).finally(() => setIsSyncing(false))
   }, [])
 
   const persist = useCallback((updated: Problem[]) => {
@@ -70,5 +71,5 @@ export function useProblems() {
     [problems, persist],
   )
 
-  return { problems, addProblem, markReviewed, deleteProblem }
+  return { problems, addProblem, markReviewed, deleteProblem, isSyncing }
 }
