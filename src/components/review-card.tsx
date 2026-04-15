@@ -29,7 +29,7 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -4, scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-      className="group relative flex items-start justify-between gap-4 border-b border-zinc-800/60 py-4 pl-4 last:border-0"
+      className="group relative flex items-start justify-between gap-4 border-b border-zinc-800/60 py-4 pl-4 last:border-0 rounded-lg transition-base hover:bg-zinc-800/20 -mx-2 px-2"
     >
       <div className={`absolute left-0 top-4 h-[calc(100%-2rem)] w-[2px] rounded-full transition-base ${accentBar[problem.difficulty]}`} />
 
