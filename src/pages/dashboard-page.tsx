@@ -4,6 +4,7 @@ import { AddProblemForm } from '../components/add-problem-form'
 import { ReviewCard } from '../components/review-card'
 import { EmptyState } from '../components/empty-state'
 import { isDueToday, today, formatDate, dayOfWeek, getGreeting } from '../lib/dates'
+import { Flame } from '@phosphor-icons/react'
 import type { Problem, Difficulty } from '../types/problem'
 
 type Props = {
@@ -91,10 +92,30 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
         {stats.map(({ label, value, accent }) => (
           <div key={label} className="flex-1 px-5 py-4">
             <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">{label}</p>
-            <p className={`mt-1.5 font-mono text-2xl font-semibold ${accent}`}>{value}</p>
+            <div className="mt-1.5 flex items-center gap-1.5">
+              <p className={`font-mono text-2xl font-semibold ${accent}`}>{value}</p>
+              {label === 'Day streak' && streakDays > 1 && (
+                <Flame weight="fill" size={16} className="text-amber-400" />
+              )}
+            </div>
           </div>
         ))}
       </div>
+
+      {problems.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 24 }}
+          className="mb-8 rounded-xl border border-dashed border-zinc-700/60 bg-zinc-900/20 px-8 py-10 text-center"
+        >
+          <p className="text-sm font-semibold text-zinc-300">No problems logged yet</p>
+          <p className="mt-1.5 text-xs text-zinc-600">
+            Hit <kbd className="rounded border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">N</kbd> or click{' '}
+            <span className="font-medium text-zinc-400">+ Add Problem</span> to log your first solve.
+          </p>
+        </motion.div>
+      )}
 
       <div className="rounded-xl border border-zinc-800/70 bg-zinc-900/30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]">
         <div className="flex items-center justify-between border-b border-zinc-800/60 px-5 py-3.5">
