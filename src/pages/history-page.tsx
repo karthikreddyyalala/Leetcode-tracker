@@ -50,6 +50,11 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
     [problems],
   )
 
+  const totalReviews = useMemo(
+    () => problems.reduce((acc, p) => acc + p.reviewDates.length, 0),
+    [problems],
+  )
+
   const total = problems.length
 
   return (
@@ -59,7 +64,14 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">History</h1>
           <p className="mt-1 text-sm text-zinc-500">
             <span className="font-mono font-semibold text-zinc-300">{problems.length}</span>{' '}
-            problem{problems.length !== 1 ? 's' : ''} logged across your career.
+            problem{problems.length !== 1 ? 's' : ''} logged
+            {totalReviews > 0 && (
+              <>
+                {' '}·{' '}
+                <span className="font-mono font-semibold text-zinc-300">{totalReviews}</span>{' '}
+                review{totalReviews !== 1 ? 's' : ''} completed
+              </>
+            )}
           </p>
         </div>
 
