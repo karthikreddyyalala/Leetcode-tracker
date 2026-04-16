@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, X } from '@phosphor-icons/react'
 import type { Difficulty } from '../types/problem'
@@ -61,6 +61,17 @@ export function AddProblemForm({ onAdd }: Props) {
     setErrors({})
   }
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const tag = (e.target as HTMLElement).tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+      if (e.key === 'n' || e.key === 'N') setOpen(true)
+      if (e.key === 'Escape') handleClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <>
       <motion.button
@@ -100,12 +111,17 @@ export function AddProblemForm({ onAdd }: Props) {
                   <h2 className="text-sm font-semibold tracking-tight text-zinc-100">
                     Log a problem
                   </h2>
-                  <button
-                    onClick={handleClose}
-                    className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-500 transition-base hover:bg-zinc-800 hover:text-zinc-300"
-                  >
-                    <X size={15} />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <kbd className="hidden rounded border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] text-zinc-500 sm:block">
+                      ESC
+                    </kbd>
+                    <button
+                      onClick={handleClose}
+                      className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-500 transition-base hover:bg-zinc-800 hover:text-zinc-300"
+                    >
+                      <X size={15} />
+                    </button>
+                  </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5 p-6">
