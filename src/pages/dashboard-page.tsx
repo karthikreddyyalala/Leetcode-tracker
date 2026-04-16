@@ -89,8 +89,14 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
       </div>
 
       <div className="mb-8 flex divide-x divide-zinc-800/70 rounded-xl border border-zinc-800/70 bg-zinc-900/30 overflow-hidden">
-        {stats.map(({ label, value, accent }) => (
-          <div key={label} className="flex-1 px-5 py-4">
+        {stats.map(({ label, value, accent }, i) => (
+          <motion.div
+            key={label}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 24, delay: i * 0.07 }}
+            className="flex-1 px-5 py-4"
+          >
             <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-600">{label}</p>
             <div className="mt-1.5 flex items-center gap-1.5">
               <p className={`font-mono text-2xl font-semibold ${accent}`}>{value}</p>
@@ -98,7 +104,7 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
                 <Flame weight="fill" size={16} className="text-amber-400" />
               )}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
