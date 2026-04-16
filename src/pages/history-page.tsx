@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { MagnifyingGlass, FunnelSimple, X, ArrowsDownUp } from '@phosphor-icons/react'
+import { MagnifyingGlass, FunnelSimple, X, ArrowsDownUp, DownloadSimple } from '@phosphor-icons/react'
 import { ReviewCard } from '../components/review-card'
 import { EmptyState } from '../components/empty-state'
 import { DifficultyBadge } from '../components/difficulty-badge'
@@ -57,6 +57,16 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
 
   const total = problems.length
 
+  function handleExport() {
+    const blob = new Blob([JSON.stringify(problems, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `leetcode-tracker-${new Date().toISOString().split('T')[0]}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="mx-auto max-w-4xl px-5 py-8">
       <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-[2fr_1fr]">
@@ -83,6 +93,14 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
                 <span className="font-mono text-xs text-zinc-500">{counts[d]}</span>
               </div>
             ))}
+            <button
+              onClick={handleExport}
+              className="ml-1 flex items-center gap-1.5 rounded-lg border border-zinc-700/60 bg-zinc-900 px-3 py-1.5 text-xs font-medium text-zinc-400 transition-base hover:border-zinc-600 hover:text-zinc-200"
+              title="Export as JSON"
+            >
+              <DownloadSimple size={13} />
+              Export
+            </button>
           </div>
         )}
       </div>
