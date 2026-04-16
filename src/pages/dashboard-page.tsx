@@ -192,6 +192,28 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
           </div>
         </motion.div>
       )}
+
+      {problems.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
+          className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
+        >
+          {[
+            { key: 'N', label: 'log problem' },
+            { key: 'D', label: 'dashboard' },
+            { key: 'H', label: 'history' },
+          ].map(({ key, label }) => (
+            <span key={key} className="flex items-center gap-1.5 text-[11px] text-zinc-700">
+              <kbd className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-600">
+                {key}
+              </kbd>
+              {label}
+            </span>
+          ))}
+        </motion.div>
+      )}
     </div>
   )
 }
