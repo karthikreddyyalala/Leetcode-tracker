@@ -38,3 +38,12 @@ export function getGreeting(): string {
   if (h < 17) return 'Good afternoon'
   return 'Good evening'
 }
+
+export function relativeTime(dateStr: string): string {
+  const d = daysUntil(dateStr)
+  if (d === 0) return 'today'
+  if (d === 1) return 'tomorrow'
+  if (d === -1) return 'yesterday'
+  if (d < 0) return `${Math.abs(d)}d ago`
+  return `in ${d}d`
+}
