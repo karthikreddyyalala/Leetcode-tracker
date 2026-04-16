@@ -11,9 +11,9 @@ type Props = {
   isSyncing: boolean
 }
 
-const tabs: { id: Page; label: string; Icon: React.ElementType }[] = [
-  { id: 'dashboard', label: 'Dashboard', Icon: SquaresFour },
-  { id: 'history', label: 'History', Icon: ClockCounterClockwise },
+const tabs: { id: Page; label: string; Icon: React.ElementType; shortcut: string }[] = [
+  { id: 'dashboard', label: 'Dashboard', Icon: SquaresFour, shortcut: 'D' },
+  { id: 'history', label: 'History', Icon: ClockCounterClockwise, shortcut: 'H' },
 ]
 
 export function NavBar({ current, onChange, dueCount, totalCount, isSyncing }: Props) {
@@ -47,7 +47,7 @@ export function NavBar({ current, onChange, dueCount, totalCount, isSyncing }: P
         </div>
 
         <nav className="flex items-center gap-0.5 rounded-lg border border-zinc-800 bg-zinc-900 p-0.5">
-          {tabs.map(({ id, label, Icon }) => (
+          {tabs.map(({ id, label, Icon, shortcut }) => (
             <button
               key={id}
               onClick={() => onChange(id)}
@@ -68,6 +68,9 @@ export function NavBar({ current, onChange, dueCount, totalCount, isSyncing }: P
               <span className={`relative z-10 transition-base ${current === id ? 'text-zinc-100' : 'text-zinc-500'}`}>
                 {label}
               </span>
+              <kbd className={`relative z-10 hidden rounded border px-1 font-mono text-[9px] transition-base sm:block ${current === id ? 'border-zinc-600 text-zinc-500' : 'border-zinc-700/60 text-zinc-600'}`}>
+                {shortcut}
+              </kbd>
               {id === 'dashboard' && dueCount > 0 && (
                 <motion.span
                   initial={{ scale: 0 }}
