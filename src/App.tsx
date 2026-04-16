@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { NavBar } from './components/nav-bar'
 import { DashboardPage } from './pages/dashboard-page'
@@ -42,6 +42,17 @@ export default function App() {
   }, [problems, markReviewed, addToast])
 
   const dueCount = problems.filter((p) => isDueToday(p.nextReview)).length
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const tag = (e.target as HTMLElement).tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+      if (e.key === 'd' || e.key === 'D') setPage('dashboard')
+      if (e.key === 'h' || e.key === 'H') setPage('history')
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <div className="min-h-[100dvh] bg-zinc-950 font-sans selection:bg-sky-500/20 selection:text-sky-300">
