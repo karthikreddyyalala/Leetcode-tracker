@@ -29,8 +29,15 @@ export function EmptyState({ variant }: Props) {
 
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-800/50">
-        <ClockCounterClockwise weight="duotone" size={24} className="text-zinc-400" />
+      <div className="relative mb-4">
+        <motion.div
+          animate={{ scale: [1, 1.18, 1], opacity: [0.25, 0, 0.25] }}
+          transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute inset-0 rounded-full bg-zinc-500/20"
+        />
+        <div className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-800/50">
+          <ClockCounterClockwise weight="duotone" size={24} className="text-zinc-400" />
+        </div>
       </div>
       <p className="text-sm font-medium text-zinc-300">No problems logged yet</p>
       <p className="mt-1 max-w-[260px] text-xs leading-relaxed text-zinc-500">
