@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowSquareOut, Check, Trash, Star, X } from '@phosphor-icons/react'
 import { DifficultyBadge } from './difficulty-badge'
-import { formatDate, daysUntil, relativeTime } from '../lib/dates'
+import { formatDate, daysUntil, relativeTime, today } from '../lib/dates'
 import type { Problem, Difficulty } from '../types/problem'
 
 type Props = {
@@ -24,6 +24,7 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
   const isOverdue = showNext && overdue <= 0
   const isVeteran = problem.reviewDates.length >= 3
   const [confirming, setConfirming] = useState(false)
+  const solvedToday = problem.dateSolved === today()
 
   useEffect(() => {
     if (!confirming) return
@@ -71,7 +72,10 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
           </a>
         </div>
         <div className="flex items-center gap-3 text-[11px] text-zinc-500">
-          <span>Solved {formatDate(problem.dateSolved)}</span>
+          <span>
+            Solved {formatDate(problem.dateSolved)}
+            {solvedToday && <span className="ml-1.5 font-medium text-sky-400/70">· today</span>}
+          </span>
           {showNext && !isOverdue && (
             <>
               <span className="h-3 w-px bg-zinc-700" />
