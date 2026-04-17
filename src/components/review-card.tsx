@@ -1,6 +1,7 @@
 'use client'
-import { motion } from 'framer-motion'
-import { ArrowSquareOut, Check, Trash, Star } from '@phosphor-icons/react'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowSquareOut, Check, Trash, Star, X } from '@phosphor-icons/react'
 import { DifficultyBadge } from './difficulty-badge'
 import { formatDate, daysUntil, relativeTime } from '../lib/dates'
 import type { Problem, Difficulty } from '../types/problem'
@@ -22,6 +23,13 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
   const overdue = daysUntil(problem.nextReview)
   const isOverdue = showNext && overdue <= 0
   const isVeteran = problem.reviewDates.length >= 3
+  const [confirming, setConfirming] = useState(false)
+
+  useEffect(() => {
+    if (!confirming) return
+    const t = setTimeout(() => setConfirming(false), 3000)
+    return () => clearTimeout(t)
+  }, [confirming])
 
   return (
     <motion.div
@@ -77,15 +85,51 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
       </div>
 
       <div className="flex shrink-0 items-center gap-1 opacity-0 transition-base group-hover:opacity-100 translate-x-1 group-hover:translate-x-0">
-        <motion.button
-          whileTap={{ scale: 0.93 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-          onClick={() => onDelete(problem.id)}
-          className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-600 transition-base hover:bg-zinc-800 hover:text-rose-400"
-          title="Remove"
-        >
-          <Trash size={14} />
-        </motion.button>
+        <AnimatePresence mode="wait" initial={false}>
+          {confirming ? (
+            <motion.div
+              key="confirm-state"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+              className="flex items-center gap-1"
+            >
+              <motion.button
+                whileTap={{ scale: 0.93 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                onClick={() => setConfirming(false)}
+                className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-500 transition-base hover:bg-zinc-800 hover:text-zinc-300"
+                title="Cancel"
+              >
+                <X size={12} />
+              </motion.button>
+              <motion.button
+                whileTap={{ scale: 0.93 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                onClick={() => onDelete(problem.id)}
+                className="flex h-7 items-center gap-1 rounded-md border border-rose-500/30 bg-rose-500/10 px-2 text-[11px] font-medium text-rose-400 transition-base hover:bg-rose-500/20"
+              >
+                <Trash size={11} />
+                Sure?
+              </motion.button>
+            </motion.div>
+          ) : (
+            <motion.button
+              key="trash"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              whileTap={{ scale: 0.93 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+              onClick={() => setConfirming(true)}
+              className="flex h-7 w-7 items-center justify-center rounded-md text-zinc-600 transition-base hover:bg-zinc-800 hover:text-rose-400"
+              title="Remove"
+            >
+              <Trash size={14} />
+            </motion.button>
+          )}
+        </AnimatePresence>
         <motion.button
           whileTap={{ scale: 0.93 }}
           transition={{ type: 'spring', stiffness: 400, damping: 20 }}
