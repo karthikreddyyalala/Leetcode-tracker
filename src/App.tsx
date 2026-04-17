@@ -43,6 +43,10 @@ export default function App() {
 
   const dueCount = problems.filter((p) => isDueToday(p.nextReview)).length
 
+  useEffect(() => {
+    document.title = dueCount > 0 ? `(${dueCount}) LC Tracker` : 'LC Tracker'
+  }, [dueCount])
+
   const navigate = useCallback((p: Page) => {
     setPage(p)
     window.scrollTo({ top: 0, behavior: 'smooth' })
