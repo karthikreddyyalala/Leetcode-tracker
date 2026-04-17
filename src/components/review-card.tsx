@@ -13,9 +13,9 @@ type Props = {
 }
 
 const accentBar: Record<Difficulty, string> = {
-  Easy: 'bg-emerald-500/50',
-  Medium: 'bg-amber-500/50',
-  Hard: 'bg-rose-500/50',
+  Easy: 'bg-emerald-500',
+  Medium: 'bg-amber-500',
+  Hard: 'bg-rose-500',
 }
 
 export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Props) {
@@ -32,7 +32,7 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
       transition={{ type: 'spring', stiffness: 260, damping: 24 }}
       className="group relative flex items-start justify-between gap-4 border-b border-zinc-800/60 py-4 pl-4 last:border-0 rounded-lg transition-base hover:bg-zinc-800/25 -mx-2 px-2 cursor-default"
     >
-      <div className={`absolute left-0 top-4 h-[calc(100%-2rem)] w-[2px] rounded-full transition-base ${accentBar[problem.difficulty]}`} />
+      <div className={`absolute left-0 top-4 h-[calc(100%-2rem)] w-[2px] rounded-full opacity-30 group-hover:opacity-90 transition-opacity duration-200 ${accentBar[problem.difficulty]}`} />
 
       <div className="flex min-w-0 flex-col gap-1.5">
         <div className="flex items-center gap-2.5 flex-wrap">
