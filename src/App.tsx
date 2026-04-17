@@ -43,20 +43,25 @@ export default function App() {
 
   const dueCount = problems.filter((p) => isDueToday(p.nextReview)).length
 
+  const navigate = useCallback((p: Page) => {
+    setPage(p)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       const tag = (e.target as HTMLElement).tagName
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
-      if (e.key === 'd' || e.key === 'D') setPage('dashboard')
-      if (e.key === 'h' || e.key === 'H') setPage('history')
+      if (e.key === 'd' || e.key === 'D') navigate('dashboard')
+      if (e.key === 'h' || e.key === 'H') navigate('history')
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [])
+  }, [navigate])
 
   return (
     <div className="min-h-[100dvh] bg-zinc-950 font-sans selection:bg-sky-500/20 selection:text-sky-300">
-      <NavBar current={page} onChange={setPage} dueCount={dueCount} totalCount={problems.length} isSyncing={isSyncing} />
+      <NavBar current={page} onChange={navigate} dueCount={dueCount} totalCount={problems.length} isSyncing={isSyncing} />
 
       <AnimatePresence mode="wait">
         <motion.main
