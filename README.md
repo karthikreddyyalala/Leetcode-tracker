@@ -1,6 +1,6 @@
 # LC Tracker
 
-A personal spaced repetition tracker for LeetCode problems. You log what you solve each day, and it tells you exactly when to review it again — no guessing, no forgetting.
+A personal spaced repetition tracker for LeetCode problems. You log what you solve each day, and it tells you exactly when to review it again. No guessing, no forgetting.
 
 The idea is simple: solving a problem once doesn't mean you've learned it. Reviewing it after 7 days, and again 7 days after that, actually makes it stick. This app handles the scheduling so you don't have to think about it.
 
@@ -8,13 +8,13 @@ The idea is simple: solving a problem once doesn't mean you've learned it. Revie
 
 ## What it does
 
-- **Log problems** — title, URL, difficulty, and the date you solved it
-- **Daily queue** — shows every problem due for review today
-- **Upcoming** — a look ahead at what's coming in the next few days, grouped by day
-- **History** — searchable, filterable list of everything you've logged with total review counts
-- **Streak tracking** — counts consecutive days with at least one solve
-- **Cross-browser sync** — data lives in localStorage but syncs to Redis so it follows you across devices
-- **Daily email reminder** — GitHub Actions runs a cron at 9am every day and fires an API call to send you an email if anything is due
+- **Log problems** - title, URL, difficulty, and the date you solved it
+- **Daily queue** - shows every problem due for review today
+- **Upcoming** - a look ahead at what's coming in the next few days, grouped by day
+- **History** - searchable, filterable list of everything you've logged with total review counts
+- **Streak tracking** - counts consecutive days with at least one solve
+- **Cross-browser sync** - data lives in localStorage but syncs to Redis so it follows you across devices
+- **Daily email reminder** - GitHub Actions runs a cron at 9am every day and fires an API call to send you an email if anything is due
 
 ---
 
@@ -51,7 +51,7 @@ CRON_SECRET=
 VERCEL_APP_URL=
 ```
 
-The app works fine without them — it'll just fall back to localStorage only.
+The app works fine without them. It'll just fall back to localStorage only.
 
 ---
 
