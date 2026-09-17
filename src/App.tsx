@@ -38,13 +38,23 @@ export default function App() {
   const handleReview = useCallback((id: string) => {
     const p = problems.find((x) => x.id === id)
     markReviewed(id)
-    if (p) addToast(`"${p.title}" marked as reviewed`)
+    if (p) {
+      const reviewCount = p.reviewDates.length + 1
+      const interval = reviewCount <= 1 ? 7 : reviewCount <= 3 ? 14 : 30
+      addToast(`"${p.title}" reviewed. Next in ${interval} days`)
+    }
   }, [problems, markReviewed, addToast])
+
+  const handleDelete = useCallback((id: string) => {
+    const p = problems.find((x) => x.id === id)
+    deleteProblem(id)
+    if (p) addToast(`"${p.title}" removed`)
+  }, [problems, deleteProblem, addToast])
 
   const dueCount = problems.filter((p) => isDueToday(p.nextReview)).length
 
   useEffect(() => {
-    document.title = dueCount > 0 ? `(${dueCount}) LC Tracker` : 'LC Tracker'
+    document.title = dueCount > 0 ? `(${dueCount}) LeetTrack` : 'LeetTrack'
   }, [dueCount])
 
   const navigate = useCallback((p: Page) => {
@@ -81,13 +91,13 @@ export default function App() {
               problems={problems}
               onAdd={handleAdd}
               onReview={handleReview}
-              onDelete={deleteProblem}
+              onDelete={handleDelete}
             />
           ) : (
             <HistoryPage
               problems={problems}
               onReview={handleReview}
-              onDelete={deleteProblem}
+              onDelete={handleDelete}
             />
           )}
         </motion.main>
