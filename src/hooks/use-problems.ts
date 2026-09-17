@@ -75,5 +75,13 @@ export function useProblems() {
     [problems, persist],
   )
 
-  return { problems, addProblem, markReviewed, deleteProblem, isSyncing }
+  const editProblem = useCallback(
+    (id: string, patch: Partial<Pick<Problem, 'title' | 'url' | 'difficulty'>>) => {
+      const updated = problems.map((p) => (p.id === id ? { ...p, ...patch } : p))
+      persist(updated)
+    },
+    [problems, persist],
+  )
+
+  return { problems, addProblem, markReviewed, deleteProblem, editProblem, isSyncing }
 }
