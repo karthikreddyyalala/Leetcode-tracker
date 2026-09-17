@@ -41,7 +41,9 @@ export function AddProblemForm({ onAdd }: Props) {
     if (!form.title.trim()) next.title = 'Title is required'
     if (!form.url.trim()) next.url = 'URL is required'
     else if (!form.url.startsWith('http')) next.url = 'Enter a valid URL'
+    else if (!form.url.includes('leetcode.com')) next.url = 'Must be a LeetCode URL'
     if (!form.dateSolved) next.dateSolved = 'Date is required'
+    else if (form.dateSolved > today()) next.dateSolved = 'Date cannot be in the future'
     setErrors(next)
     return Object.keys(next).length === 0
   }
