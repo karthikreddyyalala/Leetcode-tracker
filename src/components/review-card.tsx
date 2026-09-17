@@ -22,7 +22,8 @@ const accentBar: Record<Difficulty, string> = {
 export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Props) {
   const overdue = daysUntil(problem.nextReview)
   const isOverdue = showNext && overdue <= 0
-  const isVeteran = problem.reviewDates.length >= 3
+  const isVeteran = problem.reviewDates.length >= 5
+  const isMastered = problem.reviewDates.length >= 10
   const [confirming, setConfirming] = useState(false)
   const solvedToday = problem.dateSolved === today()
 
@@ -46,7 +47,12 @@ export function ReviewCard({ problem, onReview, onDelete, showNext = false }: Pr
       <div className="flex min-w-0 flex-col gap-1.5">
         <div className="flex items-center gap-2.5 flex-wrap">
           <DifficultyBadge difficulty={problem.difficulty} />
-          {isVeteran ? (
+          {isMastered ? (
+            <span className="inline-flex items-center gap-1 rounded-full border border-purple-400/30 bg-purple-400/10 px-2 py-0.5 font-mono text-[10px] font-semibold text-purple-400">
+              <Star weight="fill" size={9} />
+              {problem.reviewDates.length}x mastered
+            </span>
+          ) : isVeteran ? (
             <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 font-mono text-[10px] font-semibold text-amber-400">
               <Star weight="fill" size={9} />
               {problem.reviewDates.length}x
