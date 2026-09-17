@@ -183,13 +183,13 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
             <span className="text-xs font-medium uppercase tracking-widest text-zinc-600">
               Upcoming
             </span>
-            <span className="font-mono text-xs text-zinc-600">next 7 days</span>
+            <span className="font-mono text-xs text-zinc-600">next 30 days</span>
           </div>
           <div className="px-5">
             {problems
               .filter((p) => !isDueToday(p.nextReview))
               .sort((a, b) => a.nextReview.localeCompare(b.nextReview))
-              .slice(0, 5)
+              .slice(0, 10)
               .map((p) => (
                 <div key={p.id} className="flex items-center gap-3">
                   <div className="shrink-0 w-8 text-center">
