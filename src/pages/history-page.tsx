@@ -26,6 +26,7 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<Filter>('All')
   const [sortDir, setSortDir] = useState<'desc' | 'asc'>('desc')
+  const [sortBy, setSortBy] = useState<'date' | 'reviews'>('date')
 
   const filtered = useMemo(() => {
     return problems
@@ -34,11 +35,15 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
         const matchesSearch = p.title.toLowerCase().includes(search.toLowerCase())
         return matchesDiff && matchesSearch
       })
-      .sort((a, b) =>
-        sortDir === 'desc'
+      .sort((a, b) => {
+        if (sortBy === 'reviews') {
+          const diff = b.reviewDates.length - a.reviewDates.length
+          return sortDir === 'desc' ? diff : -diff
+        }
+        return sortDir === 'desc'
           ? b.dateSolved.localeCompare(a.dateSolved)
-          : a.dateSolved.localeCompare(b.dateSolved),
-      )
+          : a.dateSolved.localeCompare(b.dateSolved)
+      })
   }, [problems, search, filter])
 
   const counts = useMemo(
