@@ -63,11 +63,17 @@ export function HistoryPage({ problems, onReview, onDelete }: Props) {
   const total = problems.length
 
   function handleExport() {
-    const blob = new Blob([JSON.stringify(problems, null, 2)], { type: 'application/json' })
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      version: 1,
+      count: problems.length,
+      problems,
+    }
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `leetcode-tracker-${new Date().toISOString().split('T')[0]}.json`
+    a.download = `leet-track-export-${new Date().toISOString().split('T')[0]}.json`
     a.click()
     URL.revokeObjectURL(url)
   }
