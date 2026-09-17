@@ -22,8 +22,8 @@ export function formatDate(dateStr: string): string {
 }
 
 export function daysUntil(dateStr: string): number {
-  const now = new Date(today())
-  const target = new Date(dateStr)
+  const now = new Date(today() + 'T00:00:00')
+  const target = new Date(dateStr + 'T00:00:00')
   const diff = target.getTime() - now.getTime()
   return Math.ceil(diff / (1000 * 60 * 60 * 24))
 }
