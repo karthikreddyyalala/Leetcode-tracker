@@ -1,11 +1,14 @@
 'use client'
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, X } from '@phosphor-icons/react'
+import { CheckCircle, WarningCircle, Info, X } from '@phosphor-icons/react'
+
+export type ToastKind = 'success' | 'error' | 'info'
 
 export type Toast = {
   id: string
   message: string
+  kind?: ToastKind
 }
 
 type Props = {
@@ -13,11 +16,20 @@ type Props = {
   onDismiss: (id: string) => void
 }
 
+const kindIcon = {
+  success: <CheckCircle weight="fill" size={15} className="shrink-0 text-emerald-400" />,
+  error: <WarningCircle weight="fill" size={15} className="shrink-0 text-rose-400" />,
+  info: <Info weight="fill" size={15} className="shrink-0 text-sky-400" />,
+}
+
 function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string) => void }) {
+  const kind = toast.kind ?? 'success'
+  const duration = kind === 'error' ? 5000 : 3000
+
   useEffect(() => {
-    const timer = setTimeout(() => onDismiss(toast.id), 3000)
+    const timer = setTimeout(() => onDismiss(toast.id), duration)
     return () => clearTimeout(timer)
-  }, [toast.id, onDismiss])
+  }, [toast.id, onDismiss, duration])
 
   return (
     <motion.div
@@ -28,7 +40,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
       transition={{ type: 'spring', stiffness: 320, damping: 26 }}
       className="flex items-center gap-2.5 rounded-xl border border-zinc-700/60 bg-zinc-900 px-4 py-3 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.5)]"
     >
-      <CheckCircle weight="fill" size={15} className="shrink-0 text-emerald-400" />
+      {kindIcon[kind]}
       <span className="text-sm font-medium text-zinc-200">{toast.message}</span>
       <button
         onClick={() => onDismiss(toast.id)}
