@@ -29,7 +29,8 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
     const dates = new Set(problems.map((p) => p.dateSolved))
     let count = 0
     const cursor = new Date()
-    while (true) {
+    const MAX_DAYS = 365
+    for (let i = 0; i < MAX_DAYS; i++) {
       const d = cursor.toISOString().split('T')[0]
       if (dates.has(d)) {
         count++
@@ -39,6 +40,21 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
       }
     }
     return count
+  }, [problems])
+
+  const longestStreak = useMemo(() => {
+    const dates = [...new Set(problems.map((p) => p.dateSolved))].sort()
+    let max = 0
+    let curr = 0
+    for (let i = 0; i < dates.length; i++) {
+      if (i === 0) { curr = 1; continue }
+      const prev = new Date(dates[i - 1] + 'T00:00:00')
+      const cur = new Date(dates[i] + 'T00:00:00')
+      const diff = (cur.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24)
+      curr = diff === 1 ? curr + 1 : 1
+      if (curr > max) max = curr
+    }
+    return Math.max(max, curr)
   }, [problems])
 
   const todayLabel = formatDate(today())
@@ -59,6 +75,11 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
       label: 'Day streak',
       value: streakDays,
       accent: streakDays > 0 ? 'text-sky-400' : 'text-zinc-100',
+    },
+    {
+      label: 'Best streak',
+      value: longestStreak,
+      accent: longestStreak > 0 ? 'text-emerald-400' : 'text-zinc-100',
     },
     {
       label: 'Total logged',
