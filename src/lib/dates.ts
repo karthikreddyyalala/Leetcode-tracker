@@ -44,6 +44,18 @@ export function relativeTime(dateStr: string): string {
   if (d === 0) return 'today'
   if (d === 1) return 'tomorrow'
   if (d === -1) return 'yesterday'
+  if (d > 1 && d <= 7) return `in ${d} days`
   if (d < 0) return `${Math.abs(d)}d ago`
   return `in ${d}d`
+}
+
+export function isOverdue(dateStr: string): boolean {
+  return daysUntil(dateStr) < 0
+}
+
+export function weekNumber(dateStr: string): number {
+  const d = new Date(dateStr + 'T00:00:00')
+  const startOfYear = new Date(d.getFullYear(), 0, 1)
+  const diff = d.getTime() - startOfYear.getTime()
+  return Math.ceil((diff / (1000 * 60 * 60 * 24) + startOfYear.getDay() + 1) / 7)
 }
