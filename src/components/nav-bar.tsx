@@ -29,7 +29,7 @@ export function NavBar({ current, onChange, dueCount, totalCount, isSyncing }: P
               <rect x="7" y="7" width="4" height="4" rx="1" fill="currentColor" opacity="0.5" />
             </svg>
           </div>
-          <span className="text-sm font-semibold tracking-tight text-zinc-100">LC Tracker</span>
+          <span className="text-sm font-semibold tracking-tight text-zinc-100">LeetTrack</span>
           {isSyncing ? (
             <span className="hidden sm:flex items-center gap-1.5 font-mono text-[11px] text-zinc-600">
               <motion.span
