@@ -5,7 +5,9 @@ import { syncProblems, fetchProblems } from '../lib/api'
 import type { Problem, Difficulty } from '../types/problem'
 
 function generateId(): string {
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
+  const ts = Date.now().toString(36)
+  const rand = Math.random().toString(36).slice(2, 9)
+  return `${ts}-${rand}`
 }
 
 export function useProblems() {
@@ -53,10 +55,12 @@ export function useProblems() {
       const updated = problems.map((p) => {
         if (p.id !== id) return p
         const reviewedOn = today()
+        const reviewCount = p.reviewDates.length + 1
+        const interval = reviewCount <= 1 ? 7 : reviewCount <= 3 ? 14 : 30
         return {
           ...p,
           reviewDates: [...p.reviewDates, reviewedOn],
-          nextReview: addDays(reviewedOn, 7),
+          nextReview: addDays(reviewedOn, interval),
         }
       })
       persist(updated)
