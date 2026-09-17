@@ -25,6 +25,11 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
     [problems],
   )
 
+  const totalReviews = useMemo(
+    () => problems.reduce((sum, p) => sum + p.reviewDates.length, 0),
+    [problems],
+  )
+
   const streakDays = useMemo(() => {
     const dates = new Set(problems.map((p) => p.dateSolved))
     let count = 0
@@ -84,6 +89,11 @@ export function DashboardPage({ problems, onAdd, onReview, onDelete }: Props) {
     {
       label: 'Total logged',
       value: problems.length,
+      accent: 'text-zinc-100',
+    },
+    {
+      label: 'Total reviews',
+      value: totalReviews,
       accent: 'text-zinc-100',
     },
   ]
