@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
-import { CheckCircle, ClockCounterClockwise } from '@phosphor-icons/react'
+import { CheckCircle, ClockCounterClockwise, MagnifyingGlass } from '@phosphor-icons/react'
 
 type Props = {
-  variant: 'queue-empty' | 'history-empty'
+  variant: 'queue-empty' | 'history-empty' | 'search-empty'
 }
 
 export function EmptyState({ variant }: Props) {
@@ -22,6 +22,22 @@ export function EmptyState({ variant }: Props) {
         <p className="text-sm font-medium text-zinc-300">All clear for today</p>
         <p className="mt-1 max-w-[260px] text-xs leading-relaxed text-zinc-500">
           No problems due for review. Log a new problem or check back tomorrow.
+        </p>
+      </div>
+    )
+  }
+
+  if (variant === 'search-empty') {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="relative mb-4">
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-800/50">
+            <MagnifyingGlass weight="duotone" size={24} className="text-zinc-500" />
+          </div>
+        </div>
+        <p className="text-sm font-medium text-zinc-400">No results found</p>
+        <p className="mt-1 max-w-[240px] text-xs leading-relaxed text-zinc-600">
+          Try a different keyword or clear the filter.
         </p>
       </div>
     )
